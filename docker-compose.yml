@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  postgres:
+    container_name:  socialmedia-postgres
+    image: postgres:12.13-alpine3.17
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: jellyfish
+      POSTGRES_ROOT_PASSWORD: jellyfish
+      POSTGRES_DB: socialmedia
+    ports:
+      - '5432:5432'
+    networks:
+      - backend
+
+  adminer:
+    container_name: socialmedia-adminer
+    image: adminer
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
+    networks:
+      - backend
+networks:
+  backend:
+
+volumes:
+  pgdata:
+    driver: local
